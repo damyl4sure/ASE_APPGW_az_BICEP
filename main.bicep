@@ -118,16 +118,16 @@ resource logicsubnetNSG 'Microsoft.Network/networkSecurityGroups@2021-05-01'= {
     securityRules: [
       {
         id: logic_subnetNSG
-        name: 'bicep-vnet'
+        name: 'any-any'
         properties: {
           access: 'Allow'
           description: 'Vnet access granted'
-          destinationAddressPrefix: vnet_addr_prefix
+          destinationAddressPrefix: '*'
           destinationPortRange: '*'
           direction: 'Inbound'
           priority: 100
           protocol: '*'
-          sourceAddressPrefix: vnet_addr_prefix
+          sourceAddressPrefix: '*'
           sourcePortRange: '*'
         }
 
