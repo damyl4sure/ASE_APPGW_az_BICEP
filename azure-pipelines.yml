@@ -1,0 +1,62 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: COPY
+  jobs:
+  - job: Checkout
+    steps:
+
+    - script: echo About to checkout files to runner!
+      displayName: 'Run Checkout steps'
+
+    - task: CopyFiles@2
+      displayName: 'Include templates in the artifact'
+      inputs:
+        SourceFolder: $(Build.SourcesDirectory)
+        Contents: |
+          main.bicep
+          main.parameters.json
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish artifact'
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+
+- stage: DEPLOY
+  jobs:
+  - job: Deploy
+    steps:
+
+    - task: DownloadBuildArtifacts@0
+      displayName: 'Download artifact'
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'drop'
+        downloadPath: '$(System.ArtifactsDirectory)'
+    
+    - task: AzureCLI@2
+      displayName: 'Deploy Bicep file'
+      inputs:
+        azureSubscription: 'bicep-deploy'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          # Creating a resource group
+          az group create \
+            --name rg-bicep \
+            --location 'westus'
+          # Deploying Bicep file
+          az deployment group create \
+            --name $(Build.BuildNumber) \
+            --resource-group rg-bicep \
+            --template-file $(System.ArtifactsDirectory)/drop/main.bicep \
+            --parameters @$(System.ArtifactsDirectory)/drop/main.parameters.json \
+            --parameters location='westus'

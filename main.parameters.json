@@ -1,0 +1,87 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "storageAccountName": {
+        "value": "stcontoso6754rtf"
+      },
+
+      "storageAccount_sku_size": {
+          "value": "Standard_LRS"
+      },
+
+      "vnet_name" : {
+        "value": "bicep-vnet"
+      },
+
+      "vnet_addr_prefix" : {
+          "value": "10.0.0.0/16"
+      },
+
+      "subnet_name": { 
+        "value": [ "subnet-tom", "logic-subnet", "APPGW-subnet" ]
+      },
+
+      "subnet_addr_prefixes": { 
+          "value": [ "10.0.0.0/24", "10.0.1.0/24", "10.0.2.0/24" ]
+      },
+
+      "logic_subnetNSG": {
+        "value": "bicep-appgw-subnetNSG"
+      },
+
+      "applicationGatewayName" : {
+        "value": "appgw-bicep"
+      },
+
+      "appGwSize" : {
+        "value": "Standard_v2"
+      },
+
+      "minCapacity" : {
+        "value": 1
+      },
+
+      "maxCapacity" : {
+        "value": 2
+      },
+
+      "frontendPort" : {
+        "value": 80
+      },
+
+      "backendPort" : {
+        "value": 80
+      },
+
+      "cookieBasedAffinity" : {
+        "value": "Disabled"
+      },
+
+      "aseName" : {
+        "value": "ase-bicep"
+      },
+
+      "internalLoadBalancingMode" : {
+        "value":"Web"
+      },
+
+      "websiteName" : {
+        "value": "bicep.net"
+      },
+
+      "appServicePlanName" : {
+        "value": "asp-bicep"
+      },
+
+      "numberOfWorkers" : {
+        "value": 1
+      },
+
+      "workerPool" : {
+        "value": "1"
+      }
+
+
+    }
+}
